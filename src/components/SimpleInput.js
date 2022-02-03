@@ -4,8 +4,9 @@ import "../index.css";
 
 const SimpleInput = (props) => {
     const [enteredFormInput, setEnteredFormInput] = useState("");
-    const [enteredInputIsValid, setEnteredInputIsValid] = useState(false);
     const [enteredInputEdited, setEnteredInputEdited] = useState(false);
+
+    const enteredInputIsValid = enteredFormInput.trim() !== "";
 
     const formInputHandler = (event) => {
         setEnteredFormInput(event.target.value);
@@ -16,14 +17,17 @@ const SimpleInput = (props) => {
 
         setEnteredInputEdited(true);
 
-        if (enteredFormInput.trim() === "") {
-            setEnteredInputIsValid(true);
+        if (!enteredInputIsValid) {
             return;
         }
 
         console.log(enteredFormInput);
         setEnteredFormInput("");
-        setEnteredInputIsValid(false);
+        setEnteredInputEdited(false);
+    };
+
+    const inputBlurHandler = () => {
+        setEnteredInputEdited(true);
     };
 
     const nameInputIsValid = enteredInputIsValid && enteredInputEdited;
@@ -41,6 +45,7 @@ const SimpleInput = (props) => {
                     id="name"
                     onChange={formInputHandler}
                     value={enteredFormInput}
+                    onBlur={inputBlurHandler}
                 />
                 {nameInputIsValid && (
                     <p className="error-text">Name must not be empty</p>
